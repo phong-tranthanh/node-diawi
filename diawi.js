@@ -65,6 +65,10 @@ Diawi.prototype.onUploadComplete = function(err, response, body) {
   }
 
   try {
+    if (typeof body === 'string') {
+      console.error(`[ERROR]: ${body}`);
+      process.exit(1);
+    }
     const json = JSON.parse(body);
     this.job = json.job;
     if (DEBUG) {
