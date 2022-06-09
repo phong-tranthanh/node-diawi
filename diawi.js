@@ -24,6 +24,7 @@ const Diawi = function(opts) {
 
   this.token = opts.token.trim();
   this.path = opts.path.trim();
+  RETURN_JSON = opts.return_json;
   if (!fs.existsSync(this.path)) {
     throw (new Error('Could not find file at ' + this.path));
   }
@@ -65,7 +66,8 @@ Diawi.prototype.onUploadComplete = function(err, response, body) {
   }
 
   try {
-    if (typeof body === 'string') {
+    // @phong.tt check response type
+    if (!body.startsWith('{')) {
       console.error(`[ERROR]: ${body}`);
       process.exit(1);
     }
@@ -101,7 +103,7 @@ Diawi.prototype.poll = function(pollCount) {
         switch (json.status) {
           case 2000:
             if (json.link) {
-              this.emit('complete', json.link);
+              this.emit('complete', json); // @phong.tt return json
             } else {
               this.emit('error', new Error('Failed to get link from success response'));
             }

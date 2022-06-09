@@ -48,6 +48,12 @@ const argv = require('yargs')
                 default: false,
                 type: 'boolean',
               })
+              // @phong.tt add option to return json
+              .option('return_json', {
+                describe: 'use json type instead to string on complete',
+                default: false,
+                type: 'boolean',
+              })
               .option('dry-run', {
                 describe: 'only parse the arguments without executing the upload',
                 default: false,
@@ -84,10 +90,11 @@ function upload(argv) {
     installation_notifications: argv.installation_notifications === true ? 1 : 0,
     find_by_udid: argv.find_by_udid === true ? 1 : 0,
     comment: argv.comment,
+    return_json: argv.return_json === true, // @phong.tt parse option
   };
   const diawiCommand = new Diawi(opts)
-      .on('complete', function(url) {
-        console.log(url);
+      .on('complete', function(result) {
+        console.log(opts.return_json ? result : result.link); // @phong.tt check and return
       })
       .on('error', function(error) {
         console.error('Failed: ', error);
