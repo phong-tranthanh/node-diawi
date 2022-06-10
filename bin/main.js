@@ -94,7 +94,7 @@ function upload(argv) {
   };
   const diawiCommand = new Diawi(opts)
       .on('complete', function(result) {
-        console.log(opts.return_json ? result : result.link); // @phong.tt check and return
+        console.log(opts.return_json ? JSON.stringify(result) : result.link); // @phong.tt check and return
       })
       .on('error', function(error) {
         console.error('Failed: ', error);
